@@ -124,7 +124,8 @@ ids.forEach(i=>subSize(i));
 function ord(a,b){const ya=P[a].by||'9999',yb=P[b].by||'9999'; if(ya!==yb)return ya<yb?-1:1; return (P[a].n||'').localeCompare(P[b].n||'');}
 ids.forEach(i=>kids[i].sort(ord));
 const isChild=new Set(); Object.values(kids).forEach(a=>a.forEach(c=>isChild.add(c)));
-let roots = ids.filter(i=>P[i].bl && !isChild.has(i)).sort((a,b)=>size[b]-size[a]);
+// raízes: Burle-Dubeux (ids do parentesco, <800000) primeiro; Maranhão (800xxx) depois; cada grupo por tamanho desc
+let roots = ids.filter(i=>P[i].bl && !isChild.has(i)).sort((a,b)=>((+a>=800000?1:0)-(+b>=800000?1:0))||(size[b]-size[a]));
 
 const rendered=new Set();
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -158,7 +159,7 @@ function build(){
   document.querySelectorAll('.tog:not(.leaf)').forEach(t=>t.onclick=e=>{e.stopPropagation();
     const li=t.closest('li'); li.classList.toggle('collapsed'); t.textContent=li.classList.contains('collapsed')?'▸':'▾';});
   document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>showPerson(+c.dataset.id));
-  collapseBeyond(2);
+  collapseBeyond(0);  // inicia tudo recolhido: só os nomes dos troncos no topo
 }
 function collapseBeyond(md){document.querySelectorAll('.tree > li').forEach(li=>setDepth(li,0,md));}
 function setDepth(li,d,md){const t=li.querySelector(':scope > .row > .tog');
@@ -195,7 +196,7 @@ document.getElementById('q').addEventListener('input',e=>{clearTimeout(qt);qt=se
 function norm(s){return (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();}
 function doSearch(q){
   document.querySelectorAll('.hit').forEach(x=>x.classList.remove('hit'));
-  if(!q){collapseBeyond(2);return;}
+  if(!q){collapseBeyond(0);return;}
   const nq=norm(q);let first=null;
   document.querySelectorAll('.nm').forEach(n=>{
     if(norm(n.textContent).includes(nq)){const li0=n.closest('li');li0.classList.add('hit');
