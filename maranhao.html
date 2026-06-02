@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Família Albuquerque Maranhão</title>
+<style>
+:root{
+  --paper:#f4eee2; --paper2:#efe7d6; --ink:#2e2a24; --soft:#8a8170;
+  --line:#d9cdb4; --card:#fffdf8; --shadow:0 1px 2px #00000010,0 4px 14px #6b573514;
+  --m1:#2f6f86; --m2:#e7f0f3; --f1:#a83c64; --f2:#f6e8ee; --gold:#9c7b3f; --accent:#6b3b2e;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 600px at 70% -10%, #fbf7ee, var(--paper));}
+/* header */
+header{position:sticky;top:0;z-index:20;background:linear-gradient(#fffdf9,#f7f0e2);
+  border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  box-shadow:0 2px 10px #6b573512}
+.brand{display:flex;flex-direction:column;line-height:1.05}
+.brand b{font-family:Georgia,"Times New Roman",serif;font-size:21px;letter-spacing:.3px;color:var(--accent)}
+.brand small{color:var(--soft);font-size:12px;margin-top:2px}
+.spacer{flex:1}
+.search{position:relative}
+.search input{width:300px;max-width:46vw;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:999px;
+  font-size:14px;background:#fff;outline:none;transition:.15s;box-shadow:inset 0 1px 2px #0000000a}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #9c7b3f22}
+.search .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--soft)}
+.btn{padding:8px 13px;border:1px solid var(--line);background:#fff;border-radius:999px;cursor:pointer;font-size:13px;
+  color:#5b5346;transition:.15s}
+.btn:hover{background:var(--paper2);border-color:var(--gold);color:var(--accent)}
+/* layout */
+#wrap{display:flex;height:calc(100vh - 58px)}
+#tree{flex:1;overflow:auto;padding:22px 26px 80px}
+/* árvore + conectores */
+.tree, .tree ul{list-style:none}
+.tree{margin:0;padding:0}
+.tree ul{margin:0;padding-left:30px;position:relative}
+.tree li{position:relative;padding:4px 0}
+.tree ul>li::before{content:"";position:absolute;left:-16px;top:-4px;bottom:0;border-left:2px solid var(--line)}
+.tree ul>li::after{content:"";position:absolute;left:-16px;top:21px;width:16px;border-top:2px solid var(--line)}
+.tree ul>li:last-child::before{height:25px;bottom:auto}
+.row{display:inline-flex;align-items:center;gap:8px}
+.tog{width:22px;height:22px;flex:0 0 22px;border:1px solid var(--line);background:#fff;border-radius:50%;
+  cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--soft);font-size:12px;
+  transition:.15s;box-shadow:0 1px 1px #0000000d}
+.tog:hover{border-color:var(--gold);color:var(--accent);background:var(--paper2)}
+.tog.leaf{visibility:hidden}
+/* chip de pessoa */
+.chip{display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border:1px solid var(--line);
+  background:var(--card);border-radius:999px;cursor:pointer;box-shadow:var(--shadow);transition:.13s;max-width:min(82vw,520px)}
+.chip:hover{transform:translateY(-1px);border-color:var(--gold);box-shadow:0 2px 4px #00000012,0 8px 20px #6b573522}
+.ava{width:26px;height:26px;flex:0 0 26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px}
+.ava.m{background:linear-gradient(135deg,#3a7d94,#2f6f86)} .ava.f{background:linear-gradient(135deg,#c1577c,#a83c64)}
+.who{display:flex;flex-direction:column;line-height:1.12;min-width:0}
+.nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nm.m{color:#205b70} .nm.f{color:#8f2f52}
+.dt{font-size:11px;color:var(--soft)}
+.chip.spouse{background:var(--paper2);box-shadow:none;border-style:dashed;opacity:.95}
+.chip.spouse .ava{opacity:.85;transform:scale(.92)} .chip.spouse .nm{font-weight:500}
+.amp{color:var(--gold);font-size:13px;margin:0 -2px}
+.kcount{font-size:11px;color:#fff;background:#bcae90;border-radius:999px;padding:1px 8px;font-weight:600}
+.rep{color:#c9bfa8;font-size:12px}
+.hit .chip{outline:3px solid #f3c34d;outline-offset:1px;background:#fff9e8}
+.collapsed>.row .tog{} .collapsed>ul{display:none}
+/* painel */
+#panel{position:fixed;top:56px;right:0;bottom:0;width:340px;max-width:90vw;border-left:1px solid var(--line);
+  background:linear-gradient(#fffdf9,#f8f1e4);overflow:auto;transform:translateX(106%);transition:.24s;
+  z-index:40;box-shadow:-8px 0 26px #6b573522}
+#panel.show{transform:none}
+.pk{position:absolute;top:10px;right:12px;cursor:pointer;color:var(--soft);font-size:18px;border:0;background:none}
+.phead{padding:22px 20px 16px;text-align:center;border-bottom:1px solid var(--line)}
+.phead .big{width:62px;height:62px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;color:#fff}
+.phead h2{margin:0;font-size:18px;font-family:Georgia,serif;color:var(--accent)}
+.pbody{padding:8px 20px 30px}
+.pk2{color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 3px;font-weight:700}
+.pv{font-size:14px}
+.pv a,.px{color:var(--m1);cursor:pointer} .px:hover{text-decoration:underline}
+.muted{color:#b4a98f}
+.note{font-size:12px;color:#7a7160;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;line-height:1.4}
+.legend{padding:0 26px 6px;color:var(--soft);font-size:12px}
+.legend b.m{color:#205b70}.legend b.f{color:#8f2f52}
+::-webkit-scrollbar{width:11px;height:11px}::-webkit-scrollbar-thumb{background:#d8ccb2;border-radius:9px;border:3px solid var(--paper)}
+@media (max-width:760px){
+ header{padding:9px 12px;gap:8px}
+ .brand b{font-size:16px} .brand small{display:none}
+ .search{order:3;flex:1 1 100%} .search input{width:100%;max-width:none}
+ .btn{padding:7px 9px;font-size:12px}
+ #wrap{height:auto;display:block}
+ #tree{padding:12px 10px 90px;overflow:visible}
+ .tree ul{padding-left:18px} .tree ul>li::before{left:-14px} .tree ul>li::after{left:-14px;width:14px}
+ .chip{max-width:78vw} .nm{font-size:13px}
+ #panel{top:auto;left:0;right:0;bottom:0;width:100%;max-width:none;height:80vh;
+  border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;
+  transform:translateY(106%);box-shadow:0 -10px 30px #6b573540}
+ #panel.show{transform:none}
+ .pk{font-size:26px;top:8px;right:16px}
+ .legend{padding:0 12px 6px;font-size:11px}
+}
+</style></head><body>
+<header>
+ <div class="brand"><b>Albuquerque Maranhão</b><small id="stat"></small></div>
+ <div class="spacer"></div>
+ <div class="search"><span class="ico">🔎</span><input id="q" placeholder="buscar nome…"></div>
+ <button class="btn" onclick="expandAll(1)">＋ Expandir</button>
+ <button class="btn" onclick="expandAll(0)">－ Colapsar</button>
+</header>
+<div class="legend">Legenda: <b class="m">● masculino</b> &nbsp; <b class="f">● feminino</b> &nbsp;·&nbsp; <span class="amp">&amp;</span> casamento &nbsp;·&nbsp; clique numa pessoa para detalhes &nbsp;·&nbsp; ↩ já listado</div>
+<div id="wrap">
+ <div id="tree"></div>
+ <div id="panel"><button class="pk" onclick="closePanel()">✕</button><div id="pcontent"></div></div>
+</div>
+<script>
+const P = {"34995": {"n": "Armando de Queiroz Burle", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "", "pa": [], "sp": [], "ch": []}, "800001": {"n": "Henrique", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800010, 900005], "sp": [], "ch": []}, "800002": {"n": "Marcelo", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800011, 900006], "sp": [], "ch": []}, "800003": {"n": "André", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800012, 900007], "sp": [], "ch": []}, "800004": {"n": "Marina", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800013, 900008], "sp": [], "ch": []}, "800005": {"n": "Thiago", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800010, 900005], "sp": [], "ch": []}, "800006": {"n": "Gabriela", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800010, 900005], "sp": [], "ch": []}, "800007": {"n": "Raphael", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800011, 900006], "sp": [], "ch": []}, "800008": {"n": "Gisela", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800012, 900007], "sp": [], "ch": []}, "800009": {"n": "Joaquim", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800013, 900008], "sp": [], "ch": []}, "800010": {"n": "Eduardo 'Dadi' Ferreira Lima", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [900005], "ch": [800001, 800005, 800006]}, "800011": {"n": "Romeu Gesteira Costa", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [900006], "ch": [800002, 800007]}, "800012": {"n": "Geraldo Cosentino", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [900007], "ch": [800003, 800008]}, "800013": {"n": "João Terra", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão) | ex-marido de Fernanda (separados)", "pa": [], "sp": [900008], "ch": [800004, 800009]}, "800014": {"n": "Henrique", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800024, 800032], "sp": [], "ch": []}, "800015": {"n": "Vitória", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800029, 800035], "sp": [], "ch": []}, "800020": {"n": "Guilhermina", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800024, 800032], "sp": [], "ch": []}, "800021": {"n": "Lucas", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800027, 800033], "sp": [], "ch": []}, "800022": {"n": "Maria Cecília", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800027, 800033], "sp": [], "ch": []}, "800023": {"n": "Gustavo", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800029, 800035], "sp": [], "ch": []}, "800024": {"n": "Paula", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800032], "ch": [800014, 800020]}, "800027": {"n": "Carla", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800033], "ch": [800021, 800022]}, "800029": {"n": "Marisa", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800035], "ch": [800015, 800023]}, "800032": {"n": "Guilherme", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800039, 800045], "sp": [800024], "ch": [800014, 800020]}, "800033": {"n": "Carlos Henrique", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800039, 800045], "sp": [800027], "ch": [800021, 800022]}, "800035": {"n": "Marco Antônio", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800039, 800045], "sp": [800029], "ch": [800015, 800023]}, "800038": {"n": "Lucas", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800043, 800049], "sp": [], "ch": []}, "800039": {"n": "Elisabeth", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800045], "ch": [800032, 800033, 800035, 800040]}, "800040": {"n": "Marcello", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800039, 800045], "sp": [800041, 800046], "ch": [800044, 800048, 800050]}, "800041": {"n": "Maria Luísa", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800040], "ch": [800044]}, "800042": {"n": "Felipe", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800047, 800049], "sp": [], "ch": []}, "800043": {"n": "Claudia", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800049], "ch": [800038]}, "800044": {"n": "Beatriz", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800040, 800041], "sp": [], "ch": []}, "800045": {"n": "Gustavo", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800090, 800091], "sp": [800039], "ch": [800032, 800033, 800035, 800040]}, "800046": {"n": "Paula", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800040], "ch": [800048, 800050]}, "800047": {"n": "Vera", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800049], "ch": [800042]}, "800048": {"n": "Marcella", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800040, 800046], "sp": [], "ch": []}, "800049": {"n": "Carlos Henrique", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800090, 800091], "sp": [800043, 800047], "ch": [800038, 800042]}, "800050": {"n": "Luis Felipe", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800040, 800046], "sp": [], "ch": []}, "800051": {"n": "Arthur", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800055, 800060], "sp": [], "ch": []}, "800052": {"n": "Maria", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800064, 800069], "sp": [], "ch": []}, "800053": {"n": "Bruna", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800062, 800070], "sp": [], "ch": []}, "800054": {"n": "Henrique", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800055, 800060], "sp": [], "ch": []}, "800055": {"n": "Romero", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800061, 800067], "sp": [800060], "ch": [800051, 800054, 800059]}, "800056": {"n": "Marina", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800062, 800070], "sp": [], "ch": []}, "800057": {"n": "Isadora", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800063, 800068], "sp": [], "ch": []}, "800058": {"n": "Eduardo", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800064, 800069], "sp": [], "ch": []}, "800059": {"n": "Romero", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800055, 800060], "sp": [], "ch": []}, "800060": {"n": "Juliana", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800055], "ch": [800051, 800054, 800059]}, "800061": {"n": "Cynthia", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800067], "ch": [800055, 800066]}, "800062": {"n": "Carolina", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800070], "ch": [800053, 800056]}, "800063": {"n": "Larissa", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800073, 800076], "sp": [800068], "ch": [800057]}, "800064": {"n": "Roberta", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800073, 800076], "sp": [800069], "ch": [800052, 800058]}, "800065": {"n": "Letícia", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800066, 800072], "sp": [], "ch": []}, "800066": {"n": "Patrícia", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800061, 800067], "sp": [800072], "ch": [800065, 800071]}, "800067": {"n": "Romero", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800090, 800091], "sp": [800061], "ch": [800055, 800066]}, "800068": {"n": "Fernando", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800063], "ch": [800057]}, "800069": {"n": "Bruno", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800064], "ch": [800052, 800058]}, "800070": {"n": "Raphael", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800073, 800076], "sp": [800062], "ch": [800053, 800056]}, "800071": {"n": "Ludmila", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800066, 800072], "sp": [], "ch": []}, "800072": {"n": "Gésio", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800066], "ch": [800065, 800071]}, "800073": {"n": "Fernando", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800090, 800091], "sp": [800076], "ch": [800063, 800064, 800070]}, "800074": {"n": "Luís", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800075, 800080], "sp": [], "ch": []}, "800075": {"n": "Maria", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800080], "ch": [800074, 800078]}, "800076": {"n": "Cristina", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800073, 800082], "ch": [800063, 800064, 800070, 800077]}, "800077": {"n": "Christian", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "", "pa": [], "sp": [], "ch": []}, "800078": {"n": "Antônio", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800075, 800080], "sp": [], "ch": []}, "800079": {"n": "Bruno", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800090, 800091], "sp": [800086], "ch": [800080, 800084, 800089]}, "800080": {"n": "Mário", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800079, 800086], "sp": [800075], "ch": [800074, 800078]}, "800082": {"n": "Claude", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "", "pa": [], "sp": [], "ch": []}, "800084": {"n": "Alexandra", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800079, 800086], "sp": [800088], "ch": [800085, 800087]}, "800085": {"n": "Eric", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800084, 800088], "sp": [], "ch": []}, "800086": {"n": "Suzana", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800079], "ch": [800080, 800084, 800089]}, "800087": {"n": "Sophia", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800084, 800088], "sp": [], "ch": []}, "800088": {"n": "Peter", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800084], "ch": [800085, 800087]}, "800089": {"n": "Manuela", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [800079, 800086], "sp": [], "ch": []}, "800090": {"n": "Fernando Júlio Albuquerque Maranhão", "s": "M", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800091], "ch": [800045, 800049, 800067, 800073, 800079, 900003]}, "800091": {"n": "Gisela Costa de Albuquerque Maranhão", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "(linha materna Albuquerque Maranhão)", "pa": [], "sp": [800090], "ch": [800045, 800049, 800067, 800073, 800079, 900003]}, "900001": {"n": "Maria Luiza Ferreira Leite Burle", "s": "F", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "", "pa": [], "sp": [], "ch": []}, "900002": {"n": "Fernando Ferreira Leite Burle", "s": "M", "bl": 0, "b": "30.08.1945", "d": "14.02.2023", "by": "1945", "dy": "2023", "bp": "Recife/PE", "dp": "Recife/PE", "o": "Industrial", "note": "Pai do usuário; faleceu 14/02/2023 (sepult. Cemitério de Santo Amaro, Recife)", "pa": [34995, 900001], "sp": [900003], "ch": [900004, 900005, 900006, 900007, 900008]}, "900003": {"n": "Gisela de Albuquerque Maranhão", "s": "F", "bl": 1, "b": "20.06.1950", "d": "", "by": "1950", "dy": "", "bp": "Recife/PE", "dp": "", "o": "Arquiteta", "note": "Mãe do usuário — tronco Albuquerque Maranhão; ~32 anos em 1983 (n. c.1951) | n. 20/06/1950 (idade 20 no casamento 10/11/1970, dia/mês da procuração de cidadania)", "pa": [800090, 800091], "sp": [900002], "ch": [900004, 900005, 900006, 900007, 900008]}, "900004": {"n": "Gustavo de Albuquerque Maranhão Burle", "s": "M", "bl": 1, "b": "03.06.1983", "d": "", "by": "1983", "dy": "", "bp": "Recife/PE", "dp": "", "o": "Empresário / Administrador de Empresas", "note": "O USUÁRIO. Nascido no Hospital Santa Joana, Recife, 19h40 (certidão de nascimento).", "pa": [900002, 900003], "sp": [900009], "ch": [900012, 900013, 900014]}, "900005": {"n": "Maria Burle", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "irmã; ver árvore Albuquerque", "pa": [900002, 900003], "sp": [800010], "ch": [800001, 800005, 800006]}, "900006": {"n": "Clarissa Burle", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "irmã; ver árvore Albuquerque", "pa": [900002, 900003], "sp": [800011], "ch": [800002, 800007]}, "900007": {"n": "Gisela Burle", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "irmã; filha Gigi (Gisela Cosentino)", "pa": [900002, 900003], "sp": [800012], "ch": [800003, 800008]}, "900008": {"n": "Fernanda Burle", "s": "F", "bl": 1, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "irmã; ver árvore Albuquerque | separada de João Terra (ex-marido)", "pa": [900002, 900003], "sp": [800013], "ch": [800004, 800009]}, "900009": {"n": "Vanessa Leite Stamford", "s": "F", "bl": 0, "b": "11.04.1980", "d": "", "by": "1980", "dy": "", "bp": "Salgueiro/PE", "dp": "", "o": "Arquiteta", "note": "Esposa do usuário (n. 10h15) — linha Barros Leite / Stamford", "pa": [900015, 900016], "sp": [900004], "ch": [900012, 900013, 900014]}, "900012": {"n": "Alice Stamford Burle", "s": "F", "bl": 1, "b": "22.04.2015", "d": "", "by": "2015", "dy": "", "bp": "Recife/PE", "dp": "", "o": "", "note": "n. Hospital Santa Joana, Recife", "pa": [900004, 900009], "sp": [], "ch": []}, "900013": {"n": "Arthur Fernando Stamford Burle", "s": "M", "bl": 1, "b": "05.06.2019", "d": "", "by": "2019", "dy": "", "bp": "Recife/PE", "dp": "", "o": "", "note": "n. Hospital Santa Joana, Recife; registrado em Parnamirim/RN", "pa": [900004, 900009], "sp": [], "ch": []}, "900014": {"n": "Maria Stamford Burle", "s": "F", "bl": 1, "b": "07.04.2017", "d": "", "by": "2017", "dy": "", "bp": "Recife/PE", "dp": "", "o": "", "note": "n. Hospital Santa Joana, Recife", "pa": [900004, 900009], "sp": [], "ch": []}, "900015": {"n": "Walter José Pereira Stamford", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "", "pa": [], "sp": [], "ch": []}, "900016": {"n": "Erotides Barros Leite", "s": "M", "bl": 0, "b": "", "d": "", "by": "", "dy": "", "bp": "", "dp": "", "o": "", "note": "", "pa": [], "sp": [], "ch": []}};
+const ids = Object.keys(P).map(Number);
+const kids = {}; ids.forEach(i=>kids[i]=[]);
+function link(pa,c){ if(!(kids[pa] && P[pa] && P[c] && P[c].bl))return; const ok=P[pa].bl||(P[pa].sp||[]).some(s=>P[s]&&P[s].bl); if(ok && !kids[pa].includes(c)) kids[pa].push(c); } // pai de sangue OU com cônjuge de sangue (enteados sob o casal; stubs puros não capturam apexes)
+ids.forEach(i=>{ if(P[i].bl) (P[i].pa||[]).forEach(pa=>link(pa,i)); });  // filho -> pai
+ids.forEach(i=>{ (P[i].ch||[]).forEach(c=>link(i,c)); });                // pai -> filho (reconecta órfãos)
+const size={};
+function subSize(i,seen){ if(size[i]!=null)return size[i]; seen=seen||new Set(); if(seen.has(i))return 0; seen.add(i);
+  let s=1;(kids[i]||[]).forEach(c=>s+=subSize(c,seen)); size[i]=s; return s; }
+ids.forEach(i=>subSize(i));
+function ord(a,b){const ya=P[a].by||'9999',yb=P[b].by||'9999'; if(ya!==yb)return ya<yb?-1:1; return (P[a].n||'').localeCompare(P[b].n||'');}
+ids.forEach(i=>kids[i].sort(ord));
+const isChild=new Set(); Object.values(kids).forEach(a=>a.forEach(c=>isChild.add(c)));
+let roots = ids.filter(i=>P[i].bl && !isChild.has(i)).sort((a,b)=>size[b]-size[a]);
+
+const rendered=new Set();
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function ini(n){const w=(n||'').trim().split(/\s+/).filter(x=>/[A-Za-zÀ-ÿ]/.test(x));
+  let a=w[0]?w[0][0]:'?'; let b=w.length>1?w[w.length-1][0]:''; return (a+b).toUpperCase();}
+function yl(p){if(p.by&&p.dy)return p.by+'–'+p.dy; if(p.by)return '★ '+p.by; if(p.dy)return '† '+p.dy; return '';}
+function chip(i,spouse){const p=P[i];const sx=p.s.toLowerCase();
+  const dt=yl(p); const dth=dt?`<span class="dt">${dt}</span>`:'';
+  return `<span class="chip ${spouse?'spouse':''}" data-id="${i}"><span class="ava ${sx}">${esc(ini(p.n))}</span>`+
+    `<span class="who"><span class="nm ${sx}">${esc(p.n)}</span>${dth}</span></span>`;}
+
+function node(i){
+  if(rendered.has(i)) return `<li><span class="row"><span class="tog leaf"></span>${chip(i)}<span class="rep">↩</span></span></li>`;
+  rendered.add(i);
+  const p=P[i];
+  let sps=(p.sp||[]).filter(s=>P[s]);
+  let spH=sps.map(s=>{rendered.add(s);return `<span class="amp">&amp;</span>${chip(s,true)}`;}).join('');
+  let ch=new Set(kids[i]||[]); sps.forEach(s=>(kids[s]||[]).forEach(c=>ch.add(c)));
+  ch=[...ch].sort(ord);
+  if(ch.length){
+    return `<li class="br"><span class="row"><button class="tog">▾</button>${chip(i)}${spH}<span class="kcount">${ch.length}</span></span>`+
+      `<ul>${ch.map(node).join('')}</ul></li>`;
+  }
+  return `<li><span class="row"><span class="tog leaf"></span>${chip(i)}${spH}</span></li>`;
+}
+function build(){
+  rendered.clear();
+  let h='<ul class="tree">'; roots.forEach(r=>{if(!rendered.has(r))h+=node(r);}); h+='</ul>';
+  document.getElementById('tree').innerHTML=h;
+  document.getElementById('stat').textContent=`${ids.length} pessoas · família Albuquerque Maranhão (linha materna)`;
+  document.querySelectorAll('.tog:not(.leaf)').forEach(t=>t.onclick=e=>{e.stopPropagation();
+    const li=t.closest('li'); li.classList.toggle('collapsed'); t.textContent=li.classList.contains('collapsed')?'▸':'▾';});
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>showPerson(+c.dataset.id));
+  collapseBeyond(2);
+}
+function collapseBeyond(md){document.querySelectorAll('.tree > li').forEach(li=>setDepth(li,0,md));}
+function setDepth(li,d,md){const t=li.querySelector(':scope > .row > .tog');
+  if(t&&!t.classList.contains('leaf')){if(d>=md){li.classList.add('collapsed');t.textContent='▸';}else{li.classList.remove('collapsed');t.textContent='▾';}}
+  li.querySelectorAll(':scope > ul > li').forEach(c=>setDepth(c,d+1,md));}
+function expandAll(o){document.querySelectorAll('.tree li.br').forEach(li=>{const t=li.querySelector(':scope > .row > .tog');
+  if(o){li.classList.remove('collapsed');if(t)t.textContent='▾';}else{li.classList.add('collapsed');if(t)t.textContent='▸';}});}
+
+function showPerson(i){const p=P[i];const sx=p.s.toLowerCase();
+  const dl=(d,pl)=> (d||pl)?`${esc(d||'?')}${pl?' · '+esc(pl):''}`:'<span class="muted">—</span>';
+  const lk=id=>P[id]?`<span class="px" onclick="showPerson(${id})">${esc(P[id].n)}</span>`:'';
+  const pais=(p.pa||[]).filter(x=>P[x]).map(lk).join(', ')||'<span class="muted">—</span>';
+  const conj=(p.sp||[]).filter(x=>P[x]).map(lk).join(', ')||'<span class="muted">—</span>';
+  const fl=(kids[i]||[]).map(lk).join(', ')||'<span class="muted">—</span>';
+  document.getElementById('pcontent').innerHTML=
+   `<div class="phead"><div class="big ava ${sx}" style="font-size:22px">${esc(ini(p.n))}</div><h2>${esc(p.n)}</h2></div>`+
+   `<div class="pbody">`+
+   `<div class="pk2">Nascimento</div><div class="pv">${dl(p.b,p.bp)}</div>`+
+   `<div class="pk2">Falecimento</div><div class="pv">${dl(p.d,p.dp)}</div>`+
+   (p.o?`<div class="pk2">Profissão</div><div class="pv">${esc(p.o)}</div>`:'')+
+   `<div class="pk2">Pais</div><div class="pv">${pais}</div>`+
+   `<div class="pk2">Cônjuge(s)</div><div class="pv">${conj}</div>`+
+   `<div class="pk2">Filhos (${(kids[i]||[]).length})</div><div class="pv">${fl}</div>`+
+   (p.note?`<div class="pk2">Verbete</div><div class="note">${esc(p.note)}</div>`:'')+
+   `<div class="pk2">Fonte</div><div class="pv"><a href="https://www.parentesco.com.br/index.php?apg=pessoa&idp=${i}" target="_blank">parentesco.com.br #${i} ↗</a></div>`+
+   `</div>`;
+  document.getElementById('panel').classList.add('show');
+  document.getElementById('wrap').classList.add('haspanel');
+}
+function closePanel(){document.getElementById('panel').classList.remove('show');document.getElementById('wrap').classList.remove('haspanel');}
+
+let qt;
+document.getElementById('q').addEventListener('input',e=>{clearTimeout(qt);qt=setTimeout(()=>doSearch(e.target.value.trim()),180);});
+function norm(s){return (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();}
+function doSearch(q){
+  document.querySelectorAll('.hit').forEach(x=>x.classList.remove('hit'));
+  if(!q){collapseBeyond(2);return;}
+  const nq=norm(q);let first=null;
+  document.querySelectorAll('.nm').forEach(n=>{
+    if(norm(n.textContent).includes(nq)){const li0=n.closest('li');li0.classList.add('hit');
+      let li=li0; while(li){li.classList.remove('collapsed');const t=li.querySelector(':scope > .row > .tog');if(t&&!t.classList.contains('leaf'))t.textContent='▾';li=li.parentElement.closest('li');}
+      if(!first)first=n;}});
+  if(first)first.scrollIntoView({block:'center',behavior:'smooth'});
+}
+build();
+</script></body></html>
